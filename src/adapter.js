@@ -2131,9 +2131,9 @@ function shimRTCIceServerUrls(window) {
         }
       }
       pcConfig.iceServers = newIceServers;
+    } else if (pcConfig) {}
+      pcConfig.iceServers = [];
     }
-    console.log("pcConfig is: " + JSON.stringify(pcConfig));
-    console.log("pcConstraints are: " + JSON.stringify(pcConstraints));
     return new OrigPeerConnection(pcConfig, pcConstraints);
   };
   window.RTCPeerConnection.prototype = OrigPeerConnection.prototype;
