@@ -1,4 +1,13 @@
 # SIPml5-NG
+This software is a slight modification ICASA made from the upstream sources found on github:
+```text
+https://github.com/cloudonix/sipml5-ng
+```
+The modifications ICASA has made are as follows:
+* Allow a config file to be used to specify what is normally placed in the "expert settings"
+* Changes to the README so folks are aware of what ICASA has done.
+
+# Original README.me
 On May 14th, 2012 SIPml5, the world's first open Source HTML SIP client was released. SIPml5 had captivated the mind of RTC pioneers
   in the open source communities. However, as time pregressed, its creator Doubango Telecom had abandoned the project. On Feb 8th, 2018 
   Doubango Telecom had released their final version of SIPml5 (version 2.1.4) - and since then the code base had remained unmaintained.
