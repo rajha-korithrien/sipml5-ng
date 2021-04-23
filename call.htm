@@ -139,7 +139,7 @@
     <!-- config.js defines a variable initialConfig that has all the things we want to set into local storage
     such that the existing code will load it -->
     <script type="application/javascript">
-        console.log("Initial Configuration: " + initialConfig);
+        console.log("Initial Configuration: " + JSON.stringify(initialConfig));
         window.localStorage.setItem('org.doubango.expert.websocket_server_url', initialConfig.websocketUrl);
         window.localStorage.setItem('org.doubango.identity.realm', initialConfig.sipRealm);
         window.localStorage.setItem('org.doubango.expert.disable_video', initialConfig.disableVideo ? "true" : "false");
@@ -151,6 +151,17 @@
         window.localStorage.setItem('org.doubango.expert.disable_debug', initialConfig.disableDebugMessages ? "true" : "false");
         window.localStorage.setItem('org.doubango.expert.enable_media_caching', initialConfig.cacheMediaStream ? "true" : "false");
         window.localStorage.setItem('org.doubango.expert.disable_callbtn_options', initialConfig.disableCallButtonOptions ? "true" : "false");
+    </script>
+
+    <!-- we put in a few call back functions that get used to automatically fill in some config items based on what
+    the user enters for others -->
+    <script type="application/javascript">
+        // This function takes the contents of the "private identity" and the "realm" and uses them
+        // to compute the "public identity"
+        function updatePublicIdentity() {
+            txtPublicIdentity.value = "sip:" + txtPrivateIdentity.value + "@" + txtRealm.value;
+            window.localStorage.setItem('org.doubango.identity.impu', txtPublicIdentity.value);
+        }
     </script>
 
     <!-- Javascript code -->
@@ -1170,7 +1181,7 @@
                         </td>
                         <td>
                             <input type="text" style="width: 100%; height: 100%" id="txtPrivateIdentity" value=""
-                                   placeholder="e.g. +33600000000" />
+                                   placeholder="e.g. +33600000000" onchange="updatePublicIdentity()"/>
                         </td>
                     </tr>
                     <tr>
