@@ -2131,6 +2131,8 @@ function shimRTCIceServerUrls(window) {
         }
       }
       pcConfig.iceServers = newIceServers;
+    } else if (pcConfig) {
+      pcConfig.iceServers = [];
     }
     return new OrigPeerConnection(pcConfig, pcConstraints);
   };
