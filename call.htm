@@ -139,18 +139,22 @@
     <!-- config.js defines a variable initialConfig that has all the things we want to set into local storage
     such that the existing code will load it -->
     <script type="application/javascript">
-        console.log("Initial Configuration: " + JSON.stringify(initialConfig));
-        window.localStorage.setItem('org.doubango.expert.websocket_server_url', initialConfig.websocketUrl);
-        window.localStorage.setItem('org.doubango.identity.realm', initialConfig.sipRealm);
-        window.localStorage.setItem('org.doubango.expert.disable_video', initialConfig.disableVideo ? "true" : "false");
-        window.localStorage.setItem('org.doubango.expert.enable_rtcweb_breaker', initialConfig.enableBreakerHacks ? "true" : "false");
-        window.localStorage.setItem('org.doubango.expert.sip_outboundproxy_url', initialConfig.outboundProxyUrl);
-        window.localStorage.setItem('org.doubango.expert.ice_servers', initialConfig.iceServersJson);
-        window.localStorage.setItem('org.doubango.expert.bandwidth', initialConfig.maxBandwidthJson);
-        window.localStorage.setItem('org.doubango.expert.disable_early_ims', initialConfig.disable3GPP ? "true" : "false");
-        window.localStorage.setItem('org.doubango.expert.disable_debug', initialConfig.disableDebugMessages ? "true" : "false");
-        window.localStorage.setItem('org.doubango.expert.enable_media_caching', initialConfig.cacheMediaStream ? "true" : "false");
-        window.localStorage.setItem('org.doubango.expert.disable_callbtn_options', initialConfig.disableCallButtonOptions ? "true" : "false");
+        if(initialConfig) {
+            console.log("Initial Configuration: " + JSON.stringify(initialConfig));
+            window.localStorage.setItem('org.doubango.expert.websocket_server_url', initialConfig.websocketUrl);
+            window.localStorage.setItem('org.doubango.identity.realm', initialConfig.sipRealm);
+            window.localStorage.setItem('org.doubango.expert.disable_video', initialConfig.disableVideo ? "true" : "false");
+            window.localStorage.setItem('org.doubango.expert.enable_rtcweb_breaker', initialConfig.enableBreakerHacks ? "true" : "false");
+            window.localStorage.setItem('org.doubango.expert.sip_outboundproxy_url', initialConfig.outboundProxyUrl);
+            window.localStorage.setItem('org.doubango.expert.ice_servers', initialConfig.iceServersJson);
+            window.localStorage.setItem('org.doubango.expert.bandwidth', initialConfig.maxBandwidthJson);
+            window.localStorage.setItem('org.doubango.expert.disable_early_ims', initialConfig.disable3GPP ? "true" : "false");
+            window.localStorage.setItem('org.doubango.expert.disable_debug', initialConfig.disableDebugMessages ? "true" : "false");
+            window.localStorage.setItem('org.doubango.expert.enable_media_caching', initialConfig.cacheMediaStream ? "true" : "false");
+            window.localStorage.setItem('org.doubango.expert.disable_callbtn_options', initialConfig.disableCallButtonOptions ? "true" : "false");
+        } else {
+            console.log("No Initial Configuration found, continuing without it.");
+        }
     </script>
 
     <!-- we put in a few call back functions that get used to automatically fill in some config items based on what
