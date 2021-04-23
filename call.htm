@@ -160,7 +160,6 @@
         // to compute the "public identity"
         function updatePublicIdentity() {
             txtPublicIdentity.value = "sip:" + txtPrivateIdentity.value + "@" + txtRealm.value;
-            window.localStorage.setItem('org.doubango.identity.impu', txtPublicIdentity.value);
         }
     </script>
 
