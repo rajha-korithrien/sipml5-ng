@@ -1181,7 +1181,15 @@
                         </td>
                         <td>
                             <input type="text" style="width: 100%; height: 100%" id="txtPrivateIdentity" value=""
-                                   placeholder="e.g. +33600000000" onchange="updatePublicIdentity()"/>
+                                   placeholder="e.g. +33600000000" oninput="updatePublicIdentity()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="height: 100%">Password:</label>
+                        </td>
+                        <td>
+                            <input type="password" style="width: 100%; height: 100%" id="txtPassword" value="" />
                         </td>
                     </tr>
                     <tr>
@@ -1193,14 +1201,6 @@
                         <td>
                             <input type="text" style="width: 100%; height: 100%" id="txtPublicIdentity" value=""
                                    placeholder="e.g. sip:+33600000000@doubango.org" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label style="height: 100%">Password:</label>
-                        </td>
-                        <td>
-                            <input type="password" style="width: 100%; height: 100%" id="txtPassword" value="" />
                         </td>
                     </tr>
                     <tr>
