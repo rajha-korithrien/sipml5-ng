@@ -792,7 +792,7 @@ tmedia_session_jsep01.prototype.__get_lo = function () {
         );
 
         if(!o_RTCConfiguration.iceServers) {
-            //we must always provide a "sequence type" fpr our ice servers when calling RTCPeerConnection
+            //we must always provide a "sequence type" for our ice servers when calling RTCPeerConnection
             o_RTCConfiguration.iceServers = [];
         }
 
