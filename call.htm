@@ -499,8 +499,10 @@
                     btnHangUp.disabled = true;
                     return;
                 }
-                sipToggleMute();
+
                 saveCallOptions();
+
+
             }
             else if (oSipSessionCall) {
                 txtCallStatus.innerHTML = '<i>Connecting...</i>';
@@ -544,7 +546,8 @@
             if (oSipSessionCall) {
                 var i_ret;
                 var bMute = !oSipSessionCall.bMute;
-                txtCallStatus.innerHTML = bMute ? '<i>You are currently muted</i>' : '<i>You are currently unmuted</i>';                i_ret = oSipSessionCall.mute('audio'/*could be 'video'*/, bMute);
+                txtCallStatus.innerHTML = bMute ? '<i>You are currently muted</i>' : '<i>You are currently unmuted</i>';
+                i_ret = oSipSessionCall.mute('audio'/*could be 'video'*/, bMute);
                 if (i_ret != 0) {
                     txtCallStatus.innerHTML = '<i>Mute / Unmute failed</i>';
                     return;
@@ -881,6 +884,8 @@
                             if (bConnected) {
                                 stopRingbackTone();
                                 stopRingTone();
+                                //This starts the call muted
+                                sipToggleMute();
 
                                 if (oNotifICall) {
                                     oNotifICall.cancel();
