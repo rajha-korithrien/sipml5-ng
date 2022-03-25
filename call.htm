@@ -354,7 +354,7 @@
 
         function loadCredentials() {
             if (window.localStorage) {
-                // IE retuns 'null' if not defined
+                // IE returns 'null' if not defined
                 var s_value;
                 if ((s_value = window.localStorage.getItem('org.doubango.identity.display_name'))) txtDisplayName.value = s_value;
                 if ((s_value = window.localStorage.getItem('org.doubango.identity.impi'))) txtPrivateIdentity.value = s_value;
@@ -442,11 +442,21 @@
             }
             btnRegister.disabled = false;
         }
-        // Call in the Radio
-        function callRadio() {
+        // Call in the Radio 1
+        function callRadio1() {
             sipSendDTMF('1');
-            txtCallStatus.innerHTML = "Radio Called into Conference Room....";
+            txtCallStatus.innerHTML = "Radio 1 Called into Conference Room....";
         }
+        // Call in the Radio 2
+        function callRadio2() {
+            sipSendDTMF('2');
+            txtCallStatus.innerHTML = "Radio 2 Called into Conference Room....";
+        }
+        // Call in the Radio 3
+        //function callRadio3() {
+        //    sipSendDTMF('3');
+        //    txtCallStatus.innerHTML = "Radio 3 Called into Conference Room....";
+        //}
 
         // sends SIP REGISTER (expires=0) to logout
         function sipUnRegister() {
@@ -489,7 +499,10 @@
                     btnHangUp.disabled = true;
                     return;
                 }
+
                 saveCallOptions();
+
+
             }
             else if (oSipSessionCall) {
                 txtCallStatus.innerHTML = '<i>Connecting...</i>';
@@ -533,13 +546,14 @@
             if (oSipSessionCall) {
                 var i_ret;
                 var bMute = !oSipSessionCall.bMute;
-                txtCallStatus.innerHTML = bMute ? '<i>You are currently muted</i>' : '<i>You are currently unmuted</i>';                i_ret = oSipSessionCall.mute('audio'/*could be 'video'*/, bMute);
+                txtCallStatus.innerHTML = bMute ? '<i>You are currently muted</i>' : '<i>You are currently unmuted</i>';
+                i_ret = oSipSessionCall.mute('audio'/*could be 'video'*/, bMute);
                 if (i_ret != 0) {
                     txtCallStatus.innerHTML = '<i>Mute / Unmute failed</i>';
                     return;
                 }
                 oSipSessionCall.bMute = bMute;
-                btnMute.value = bMute ? "Unmute" : "Mute";
+
             }
         }
 
@@ -734,7 +748,6 @@
         function uiCallTerminated(s_description) {
             uiBtnCallSetText("Call");
             btnHangUp.value = 'HangUp';
-            btnMute.value = "Mute";
             btnCall.disabled = false;
             btnHangUp.disabled = true;
             if (window.btnBFCP) window.btnBFCP.disabled = true;
@@ -871,6 +884,8 @@
                             if (bConnected) {
                                 stopRingbackTone();
                                 stopRingTone();
+                                //This starts the call muted
+                                sipToggleMute();
 
                                 if (oNotifICall) {
                                     oNotifICall.cancel();
@@ -1262,8 +1277,10 @@
                     <tr>
                         <td align='center'>
                             <div id='divCallOptions' class='call-options' style='opacity: 0; margin-top: 0px'>
-                                <input type="button" class="btn" value="Call Radio" onclick="callRadio();" />
-                                <input type="button" class="btn" style="" id="btnMute" value="Mute" onclick='sipToggleMute();' /> &nbsp;
+                                <input type="button" class="btn" value="Call Radio 1" onclick="callRadio1();" />
+                                <input type="button" class="btn" value="Call Radio 2" onclick="callRadio2();" />
+                                <!--input type="button" class="btn" value="Call Radio 3" onclick="callRadio3();" />
+                                <input type="button" class="btn" style="" id="btnMute" value="Mute" onclick='sipToggleMute();' /--> &nbsp;
                                 <input type="button" class="btn" style="" id="btnKeyPad" value="KeyPad" onclick='openKeyPad();' />
                                 <input type="button" id="btnptt" class="btn btn-success" style="" value="PTT"  />
                             </div>
@@ -1325,15 +1342,15 @@
         var pttbtn = document.getElementById("btnptt");
         pttbtn.onmousedown = function(){
             pttbtn.value= 'PTT-TX';
-            sipSendDTMF('#');
+            sipToggleMute();
             pttbtn.className = "btn btn-danger";
-            txtCallStatus.innerHTML = "Transmitting...";
+
         };
         pttbtn.onmouseup = function(){
             pttbtn.value= 'PTT';
-            sipSendDTMF('*');
+            sipToggleMute();
             pttbtn.className = "btn btn-success";
-            txtCallStatus.innerHTML = "End Transmission...";
+
 
         };
     </script>
