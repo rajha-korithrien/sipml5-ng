@@ -784,7 +784,7 @@ tmedia_session_jsep01.prototype.__get_lo = function () {
         var o_RTCConfiguration = Object.assign({},
             {
                 iceServers: (o_iceServers && !o_iceServers.length) ? null : o_iceServers,
-                sdpSemantics: "plan-b",
+                sdpSemantics: "unified-plan",
                 //iceCandidatePoolSize: b_isChrome ? 2 : 0 // experiment
             },
 
