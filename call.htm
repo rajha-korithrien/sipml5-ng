@@ -1343,13 +1343,18 @@
         pttbtn.onmousedown = function(){
             pttbtn.value= 'PTT-TX';
             sipToggleMute();
+            sipSendDTMF('#');
             pttbtn.className = "btn btn-danger";
+            txtCallStatus.innerHTML = "Transmitting...";
+
 
         };
         pttbtn.onmouseup = function(){
             pttbtn.value= 'PTT';
             sipToggleMute();
+            sipSendDTMF('*');
             pttbtn.className = "btn btn-success";
+            txtCallStatus.innerHTML = "End Transmission...";
 
 
         };
