@@ -82,3 +82,33 @@ function unpopulateCallOptionsDiv(){
         element.removeChild(element.firstChild);
     }
 }
+
+function buildCallInfoTable(){
+    const divId = 'divConferenceDetails';
+    const parent = document.getElementById(divId);
+    const radioConfig = JSON.parse(window.localStorage.getItem('edu.nmt.icasa.conference_details'));
+    if(radioConfig){
+        const table = document.createElement("TABLE");
+        parent.appendChild(table);
+        //first create the header
+        const headerRow = table.insertRow();
+        const confHeader = headerRow.insertCell();
+        confHeader.appendChild(document.createTextNode("Conference Room Extension"));
+        const radioHeader = headerRow.insertCell();
+        radioHeader.appendChild(document.createTextNode("Radio Frequencies Available"));
+        //now populate the conference / radio information
+        for (const [extension, radioInfoList] of Object.entries(radioConfig)) {
+            const currentRow = table.insertRow();
+            let currentCell = currentRow.insertCell();
+            currentCell.appendChild(document.createTextNode(extension));
+            for(const radioInfo of radioInfoList){
+                const currentCell = currentRow.insertCell();
+                currentCell.appendChild(document.createTextNode(radioInfo.frequency));
+            }
+        }
+    }else{
+        const span = document.createElement("SPAN");
+        span.textContent = "No conference config";
+        parent.appendChild(span);
+    }
+}

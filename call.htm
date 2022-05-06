@@ -444,21 +444,6 @@
             }
             btnRegister.disabled = false;
         }
-        // Call in the Radio 1
-        function callRadio1() {
-            sipSendDTMF('1');
-            txtCallStatus.innerHTML = "Radio 1 Called into Conference Room....";
-        }
-        // Call in the Radio 2
-        function callRadio2() {
-            sipSendDTMF('2');
-            txtCallStatus.innerHTML = "Radio 2 Called into Conference Room....";
-        }
-        // Call in the Radio 3
-        //function callRadio3() {
-        //    sipSendDTMF('3');
-        //    txtCallStatus.innerHTML = "Radio 3 Called into Conference Room....";
-        //}
 
         // sends SIP REGISTER (expires=0) to logout
         function sipUnRegister() {
@@ -1295,6 +1280,14 @@
         <br />
         <footer>
 
+            <div id="divConferenceDetailsHolder">
+                <fieldset id="divConferenceDetails">
+                    <legend>Conference / Radio Information</legend>
+                </fieldset>
+            </div>
+            &nbsp;
+            <hr>
+            &nbsp;
             <p>
                 &copy; Doubango Telecom 2012-2016 <br />
                 <i>Inspiring the future</i>
@@ -1360,6 +1353,7 @@
     <audio id="ringbacktone" loop src="sounds/ringbacktone.wav"> </audio>
     <audio id="dtmfTone" src="sounds/dtmf.wav"> </audio>
 
+    <script type="application/javascript">buildCallInfoTable();</script>
     <!-- GOOGLE ANALYTICS -->
     <!--
     <script type="text/javascript">
