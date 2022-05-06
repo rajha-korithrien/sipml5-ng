@@ -47,6 +47,16 @@ function populateCallOptionsDiv(phoneFieldId) {
     const calledNumber = document.getElementById(phoneFieldId).value;
     const radioConfig = JSON.parse(window.localStorage.getItem('edu.nmt.icasa.conference_details'));
     if(radioConfig && radioConfig[calledNumber]){
+
+        //We use a fieldSet to hold the "call radio" buttons
+        const fieldSet = document.createElement("FIELDSET");
+        fieldSet.id = "radioField";
+        const fieldLegend = document.createElement("LEGEND");
+        fieldLegend.innerHTML = "Conference Radios";
+        fieldSet.appendChild(fieldLegend);
+        const parent = document.getElementById(divId);
+        parent.appendChild(fieldSet);
+
         const radioInfoList = radioConfig[calledNumber];
         for(const radioInfo of radioInfoList){
             const radioFrequency = radioInfo.frequency;
@@ -55,7 +65,7 @@ function populateCallOptionsDiv(phoneFieldId) {
             addNewButton(function(){
                 txtCallStatus.innerHTML = "Called Radio: " + buttonText;
                 sipSendDTMF(keyPadId);
-            }, buttonText, "btn", keyPadId, "", divId);
+            }, buttonText, "btn", keyPadId, "", fieldSet.id);
         }
     }else{
         const parent = document.getElementById(divId);
