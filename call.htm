@@ -152,6 +152,7 @@
             window.localStorage.setItem('org.doubango.expert.disable_debug', initialConfig.disableDebugMessages ? "true" : "false");
             window.localStorage.setItem('org.doubango.expert.enable_media_caching', initialConfig.cacheMediaStream ? "true" : "false");
             window.localStorage.setItem('org.doubango.expert.disable_callbtn_options', initialConfig.disableCallButtonOptions ? "true" : "false");
+            window.localStorage.setItem('edu.nmt.icasa.conference_details', initialConfig.conferenceDetails);
         } else {
             console.log("No Initial Configuration found, continuing without it.");
         }
@@ -1277,12 +1278,7 @@
                     <tr>
                         <td align='center'>
                             <div id='divCallOptions' class='call-options' style='opacity: 0; margin-top: 0px'>
-                                <input type="button" class="btn" value="Call Radio 1" onclick="callRadio1();" />
-                                <input type="button" class="btn" value="Call Radio 2" onclick="callRadio2();" />
-                                <!--input type="button" class="btn" value="Call Radio 3" onclick="callRadio3();" />
-                                <input type="button" class="btn" style="" id="btnMute" value="Mute" onclick='sipToggleMute();' /--> &nbsp;
-                                <input type="button" class="btn" style="" id="btnKeyPad" value="KeyPad" onclick='openKeyPad();' />
-                                <input type="button" id="btnptt" class="btn btn-success" style="" value="PTT"  />
+                                <!-- This DIV tag is dynamically populated by a javascript call to populateCallOptions() -->
                             </div>
                         </td>
                     </tr>
@@ -1338,28 +1334,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script>
-        var pttbtn = document.getElementById("btnptt");
-        pttbtn.onmousedown = function(){
-            pttbtn.value= 'PTT-TX';
-            sipToggleMute();
-            sipSendDTMF('#');
-            pttbtn.className = "btn btn-danger";
-            txtCallStatus.innerHTML = "Transmitting...";
-
-
-        };
-        pttbtn.onmouseup = function(){
-            pttbtn.value= 'PTT';
-            sipToggleMute();
-            sipSendDTMF('*');
-            pttbtn.className = "btn btn-success";
-            txtCallStatus.innerHTML = "End Transmission...";
-
-
-        };
-    </script>
-
     <script type="text/javascript" src="./assets/js/jquery.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap-transition.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap-alert.js"></script>
@@ -1380,7 +1354,12 @@
     <audio id="ringbacktone" loop src="sounds/ringbacktone.wav"> </audio>
     <audio id="dtmfTone" src="sounds/dtmf.wav"> </audio>
 
+
+    <script type="application/javascript" src="./assets/js/populate-call-options.js"></script>
+    <script type="application/javascript">populateCallOptionsDiv();</script>
+
     <!-- GOOGLE ANALYTICS -->
+    <!--
     <script type="text/javascript">
         var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
         document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -1392,6 +1371,6 @@
             pageTracker._trackPageview();
         } catch (err) { }
     </script>
-
+    -->
 </body>
 </html>
