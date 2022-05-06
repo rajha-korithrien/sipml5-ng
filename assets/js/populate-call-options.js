@@ -7,22 +7,22 @@ function addNewButton(onClickFunction, buttonText, buttonClass, buttonId, button
     button.id = buttonId;
     button.style = buttonStyle;
 
-    console.log("Building button with text: " + buttonText);
     const parent = document.getElementById(parentId);
     parent.appendChild(button);
 
     return button;
 }
 
-function populateCallOptionsDiv() {
+function populateCallOptionsDiv(phoneFieldId) {
+    const divId = 'divCallOptions';
     //This original sipml5 had buttons for the keypad the HTLM looked like this
     //<input type="button" class="btn" style="" id="btnKeyPad" value="KeyPad" onclick='openKeyPad();' />
     //So we use our javascript to create the same button
-    addNewButton(openKeyPad, "KeyPad", "btn", "btnKeyPad", "", 'divCallOptions');
+    addNewButton(openKeyPad, "KeyPad", "btn", "btnKeyPad", "", divId);
 
     //We add a PushToTalk button that looked like this
     //<input type="button" id="btnptt" class="btn btn-success" style="" value="PTT"  />
-    const pttButton = addNewButton(null, "PTT", "btn btn-success", "btnptt", "", 'divCallOptions');
+    const pttButton = addNewButton(null, "PTT", "btn btn-success", "btnptt", "", divId);
     pttButton.onmousedown = function(){
         pttButton.value= 'PTT-TX';
         sipToggleMute();
@@ -44,11 +44,31 @@ function populateCallOptionsDiv() {
 
     //If we have information about radios and conference rooms we process it here and use it to add buttons
     //const radioConfig = window.localStorage.getItem('edu.nmt.icasa.conference_details');
-    const radioConfig = [{'roomNumber':'301', 'radioFrequency':'120.0Mhz'}, {'roomNumber':'302', 'radioFrequency':'560.0Mhz'}];
-    if(radioConfig){
-
+    const calledNumber = document.getElementById(phoneFieldId).value;
+    const radioConfig = JSON.parse(window.localStorage.getItem('edu.nmt.icasa.conference_details'));
+    if(radioConfig && radioConfig[calledNumber]){
+        const radioInfoList = radioConfig[calledNumber];
+        for(const radioInfo of radioInfoList){
+            const radioFrequency = radioInfo.frequency;
+            const keyPadId = radioInfo.keyPadId;
+            const buttonText = radioFrequency + " - " + keyPadId;
+            addNewButton(function(){
+                txtCallStatus.innerHTML = "Called Radio: " + buttonText;
+                sipSendDTMF(keyPadId);
+            }, buttonText, "btn", keyPadId, "", divId);
+        }
     }else{
-        const parent = document.getElementById(parentId);
-        console.log("Do not have radio/room configuration.");
+        const parent = document.getElementById(divId);
+        const span = document.createElement("SPAN");
+        span.textContent = "No conference config";
+        parent.appendChild(span);
+    }
+}
+
+function unpopulateCallOptionsDiv(){
+    const divId = 'divCallOptions';
+    const element = document.getElementById(divId);
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
     }
 }

@@ -167,6 +167,7 @@
             txtPublicIdentity.value = "sip:" + txtPrivateIdentity.value + "@" + txtRealm.value;
         }
     </script>
+    <script type="application/javascript" src="./assets/js/populate-call-options.js"></script>
 
     <!-- Javascript code -->
     <script type="text/javascript">
@@ -461,6 +462,7 @@
 
         // sends SIP REGISTER (expires=0) to logout
         function sipUnRegister() {
+            unpopulateCallOptionsDiv();
             if (oSipStack) {
                 oSipStack.stop(); // shutdown all sessions
             }
@@ -499,6 +501,8 @@
                     btnCall.disabled = false;
                     btnHangUp.disabled = true;
                     return;
+                }else{
+                    populateCallOptionsDiv('txtPhoneNumber')
                 }
 
                 saveCallOptions();
@@ -563,6 +567,7 @@
             if (oSipSessionCall) {
                 txtCallStatus.innerHTML = '<i>Terminating the call...</i>';
                 oSipSessionCall.hangup({ events_listener: { events: '*', listener: onSipEventSession } });
+                unpopulateCallOptionsDiv();
             }
         }
 
@@ -917,6 +922,7 @@
                         else if (e.session == oSipSessionCall) {
                             uiCallTerminated(e.description);
                         }
+                        unpopulateCallOptionsDiv();
                         break;
                     } // 'terminating' | 'terminated'
 
@@ -1353,10 +1359,6 @@
     <audio id="ringtone" loop src="sounds/ringtone.wav"> </audio>
     <audio id="ringbacktone" loop src="sounds/ringbacktone.wav"> </audio>
     <audio id="dtmfTone" src="sounds/dtmf.wav"> </audio>
-
-
-    <script type="application/javascript" src="./assets/js/populate-call-options.js"></script>
-    <script type="application/javascript">populateCallOptionsDiv();</script>
 
     <!-- GOOGLE ANALYTICS -->
     <!--
