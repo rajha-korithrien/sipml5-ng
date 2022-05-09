@@ -152,6 +152,7 @@
             window.localStorage.setItem('org.doubango.expert.disable_debug', initialConfig.disableDebugMessages ? "true" : "false");
             window.localStorage.setItem('org.doubango.expert.enable_media_caching', initialConfig.cacheMediaStream ? "true" : "false");
             window.localStorage.setItem('org.doubango.expert.disable_callbtn_options', initialConfig.disableCallButtonOptions ? "true" : "false");
+            window.localStorage.setItem('edu.nmt.icasa.conference_details', initialConfig.conferenceDetails);
         } else {
             console.log("No Initial Configuration found, continuing without it.");
         }
@@ -166,6 +167,7 @@
             txtPublicIdentity.value = "sip:" + txtPrivateIdentity.value + "@" + txtRealm.value;
         }
     </script>
+    <script type="application/javascript" src="./assets/js/populate-call-options.js"></script>
 
     <!-- Javascript code -->
     <script type="text/javascript">
@@ -442,24 +444,10 @@
             }
             btnRegister.disabled = false;
         }
-        // Call in the Radio 1
-        function callRadio1() {
-            sipSendDTMF('1');
-            txtCallStatus.innerHTML = "Radio 1 Called into Conference Room....";
-        }
-        // Call in the Radio 2
-        function callRadio2() {
-            sipSendDTMF('2');
-            txtCallStatus.innerHTML = "Radio 2 Called into Conference Room....";
-        }
-        // Call in the Radio 3
-        //function callRadio3() {
-        //    sipSendDTMF('3');
-        //    txtCallStatus.innerHTML = "Radio 3 Called into Conference Room....";
-        //}
 
         // sends SIP REGISTER (expires=0) to logout
         function sipUnRegister() {
+            unpopulateCallOptionsDiv();
             if (oSipStack) {
                 oSipStack.stop(); // shutdown all sessions
             }
@@ -498,6 +486,8 @@
                     btnCall.disabled = false;
                     btnHangUp.disabled = true;
                     return;
+                }else{
+                    populateCallOptionsDiv('txtPhoneNumber')
                 }
 
                 saveCallOptions();
@@ -562,6 +552,7 @@
             if (oSipSessionCall) {
                 txtCallStatus.innerHTML = '<i>Terminating the call...</i>';
                 oSipSessionCall.hangup({ events_listener: { events: '*', listener: onSipEventSession } });
+                unpopulateCallOptionsDiv();
             }
         }
 
@@ -916,6 +907,7 @@
                         else if (e.session == oSipSessionCall) {
                             uiCallTerminated(e.description);
                         }
+                        unpopulateCallOptionsDiv();
                         break;
                     } // 'terminating' | 'terminated'
 
@@ -1277,12 +1269,7 @@
                     <tr>
                         <td align='center'>
                             <div id='divCallOptions' class='call-options' style='opacity: 0; margin-top: 0px'>
-                                <input type="button" class="btn" value="Call Radio 1" onclick="callRadio1();" />
-                                <input type="button" class="btn" value="Call Radio 2" onclick="callRadio2();" />
-                                <!--input type="button" class="btn" value="Call Radio 3" onclick="callRadio3();" />
-                                <input type="button" class="btn" style="" id="btnMute" value="Mute" onclick='sipToggleMute();' /--> &nbsp;
-                                <input type="button" class="btn" style="" id="btnKeyPad" value="KeyPad" onclick='openKeyPad();' />
-                                <input type="button" id="btnptt" class="btn btn-success" style="" value="PTT"  />
+                                <!-- This DIV tag is dynamically populated by a javascript call to populateCallOptions() -->
                             </div>
                         </td>
                     </tr>
@@ -1293,6 +1280,14 @@
         <br />
         <footer>
 
+            <div id="divConferenceDetailsHolder">
+                <fieldset id="divConferenceDetails">
+                    <legend>Conference / Radio Information</legend>
+                </fieldset>
+            </div>
+            &nbsp;
+            <hr>
+            &nbsp;
             <p>
                 &copy; Doubango Telecom 2012-2016 <br />
                 <i>Inspiring the future</i>
@@ -1338,28 +1333,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script>
-        var pttbtn = document.getElementById("btnptt");
-        pttbtn.onmousedown = function(){
-            pttbtn.value= 'PTT-TX';
-            sipToggleMute();
-            sipSendDTMF('#');
-            pttbtn.className = "btn btn-danger";
-            txtCallStatus.innerHTML = "Transmitting...";
-
-
-        };
-        pttbtn.onmouseup = function(){
-            pttbtn.value= 'PTT';
-            sipToggleMute();
-            sipSendDTMF('*');
-            pttbtn.className = "btn btn-success";
-            txtCallStatus.innerHTML = "End Transmission...";
-
-
-        };
-    </script>
-
     <script type="text/javascript" src="./assets/js/jquery.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap-transition.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap-alert.js"></script>
@@ -1380,7 +1353,9 @@
     <audio id="ringbacktone" loop src="sounds/ringbacktone.wav"> </audio>
     <audio id="dtmfTone" src="sounds/dtmf.wav"> </audio>
 
+    <script type="application/javascript">buildCallInfoTable();</script>
     <!-- GOOGLE ANALYTICS -->
+    <!--
     <script type="text/javascript">
         var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
         document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -1392,6 +1367,6 @@
             pageTracker._trackPageview();
         } catch (err) { }
     </script>
-
+    -->
 </body>
 </html>
