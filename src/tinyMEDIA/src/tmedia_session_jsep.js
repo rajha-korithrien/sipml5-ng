@@ -797,6 +797,9 @@ tmedia_session_jsep01.prototype.__get_lo = function () {
         }
 
         this.o_pc = new window.RTCPeerConnection(o_RTCConfiguration, o_constraints);
+        //We add an event listener here to be informed of when remote media streams are added to the connection.
+        //This is how we can get ahold of the remote media streams if we need them
+        this.o_pc.addEventListener('track', rtcPeerConnectionTrackEventListener);
 
         this.o_pc.onicecandidate = tmedia_session_jsep01.mozThis ? tmedia_session_jsep01.onIceCandidate : function (o_event) { tmedia_session_jsep01.onIceCandidate(o_event, This); };
         this.o_pc.iceconnectionstatechange = tmedia_session_jsep01.mozThis ? tmedia_session_jsep01.onIceConnectionStateChange : function (o_event) { tmedia_session_jsep01.onIceConnectionStateChange(o_event, This); };
