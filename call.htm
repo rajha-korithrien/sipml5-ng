@@ -487,7 +487,7 @@
                     btnHangUp.disabled = true;
                     return;
                 }else{
-                    populateCallOptionsDiv('txtPhoneNumber')
+                    populateCallOptionsDiv('txtPhoneNumber');
                 }
 
                 saveCallOptions();
@@ -1279,12 +1279,58 @@
 
         <br />
         <footer>
+            <table>
+                <tr>
+                    <td>
+                        <div id="divConferenceDetailsHolder">
+                            <fieldset id="divConferenceDetails">
+                                <legend>Conference / Radio Information</legend>
+                            </fieldset>
+                        </div>
+                    </td>
+                    <td>
+                        <div id="peak-meter" style="width: 5em; height: 20em; margin: 1em 0;"></div>
+                        <script src="https://esonderegger.github.io/web-audio-peak-meter/web-audio-peak-meter-2.0.0.min.js"></script>
+                        <script>
+                            /**
+                             * This function is used to attach a remote MediaStream to the volume meter.
+                             * We have only 1 DIV that we use for a volume meter, but that should be OK because it will
+                             * only ever get used by the 1 remote audio stream a session can connect to at a time.
+                             * @param stream a MediaStream to which we want to attach to the DIV that holds the meter.
+                             */
+                            function enablePeakMeter(stream) {
+                                const meterElement = document.getElementById('peak-meter');
+                                //If our meterElement has been used before it will have children, so we can just get rid of them.
+                                meterElement.replaceChildren();
+                                const audioCtx = new window.AudioContext();
+                                const sourceNode = audioCtx.createMediaStreamSource(stream);
+                                //we don't actually need to hook up our sourceNode to any output, so we don't connect it to anything
+                                //If we wanted to have a meter for our own mic volume that would be a different story.
+                                //sourceNode.connect(audioCtx.destination);
+                                const meterNode = webAudioPeakMeter.createMeterNode(sourceNode, audioCtx);
+                                webAudioPeakMeter.createMeter(meterElement, meterNode, {});
+                            }
 
-            <div id="divConferenceDetailsHolder">
-                <fieldset id="divConferenceDetails">
-                    <legend>Conference / Radio Information</legend>
-                </fieldset>
-            </div>
+                            /**
+                             * This function is registered as a callback to the RTCPeerConnection held in tmedia_session_jsep
+                             * This allows us to be notified of when a "remote" media stream is connected. We expect this
+                             * remote media stream to be the audio data from whatever SIPml5 is talking to.
+                             * @param event an RTCTrackEvent that can be used to get the stream(s) that have been attached.
+                             */
+                            function rtcPeerConnectionTrackEventListener(event){
+                                if(event.streams.length === 0){
+                                    console.log("PRTCPeerConnection has attached zero streams, ignoring this attach event.")
+                                }else {
+                                    if (event.streams.length > 1) {
+                                        console.log("RTCPeerConnection has attached more than 1 stream. Only creating volume monitor for the first one.");
+                                    }
+                                    enablePeakMeter(event.streams[0]);
+                                }
+                            }
+                        </script>
+                    </td>
+                </tr>
+            </table>
             &nbsp;
             <hr>
             &nbsp;
